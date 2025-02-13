@@ -342,8 +342,8 @@ https://skillbox.ru/media/code/mnozhestva-v-python-vvodnyy-gayd-dlya-nachinayush
 https://github.com/cyberspacedk/Git-commands
 
 # Шпаргалку по работе с командами git
-git clone https://github.com/Agmongui/python/tree/main/lab01
-git add 10_store.py
+git clone
+git add 
 git status
 git push
-git commit -m "Name of commit" 
+git commit -m  
