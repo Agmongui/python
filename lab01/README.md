@@ -346,9 +346,9 @@ https://github.com/cyberspacedk/Git-commands
 # Шпаргалку по работе с командами git
 
 ```
-git clone https://github.com/Agmongui/python/tree/main/lab01
-git add N
-git status
-git push
-git commit -m "Name of commit"
+git clone https://github.com/Agmongui/python/tree/main/lab01 - создаёт копию существующего репозитория в новый каталог
+git add N - выбирает конкретные файлы или изменения для включения в следующий коммит
+git status - отображает состояние рабочего каталога
+git push - передаёт в удаленный репозиторий изменения
+git commit -m "Name of commit" - создаёт коммит с указанным коментарием
 ```
