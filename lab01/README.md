@@ -343,7 +343,7 @@ https://github.com/cyberspacedk/Git-commands
 
 # Шпаргалку по работе с командами git
 git clone https://github.com/Agmongui/python/tree/main/lab01
-git add 10_store.py
+git add N
 git status
 git push
 git commit -m "Name of commit" 
