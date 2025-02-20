@@ -4,17 +4,13 @@
 Посчитала, сколько кодов может составить Настя, используя гласные буквы не более 1 раза.
 ## Решение
 ```python
-len = "НАСТЯ"
+import itertools
 count = 0
-for l1 in len:
-    for l2 in len:
-        for l3 in len:
-            for l4 in len:
-                for l5 in len:
-                    for l6 in len:
-                        x = l1 + l2 + l3 + l4 +l5 + l6
-                        if x.count("А") <= 1 and x.count("Я") <= 1:
-                            count += 1
+slovo = "НАСТЯ"
+for a in itertools.product(slovo, repeat = 6):
+    b = ''.join(a)
+    if b.count("А") <= 1 and b.count("Я") <= 1:
+        count+= 1
 print(count)
 ```
 ## Скриншот
