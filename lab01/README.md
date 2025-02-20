@@ -337,13 +337,18 @@ print('Стул -', store[goods['Стул']][0]['quantity'], 'шт, стоимо
 ## Скриншот
 ![](https://github.com/Agmongui/python/blob/main/lab01/10.png?raw=true)
 ## Используемые источники:
+```
 https://clck.ru/MfEMS
 https://skillbox.ru/media/code/mnozhestva-v-python-vvodnyy-gayd-dlya-nachinayushchikh/
 https://github.com/cyberspacedk/Git-commands
+```
 
 # Шпаргалку по работе с командами git
+
+```
 git clone https://github.com/Agmongui/python/tree/main/lab01
 git add N
 git status
 git push
-git commit -m "Name of commit" 
+git commit -m "Name of commit"
+```
