@@ -337,11 +337,14 @@ print('Стул -', store[goods['Стул']][0]['quantity'], 'шт, стоимо
 ## Скриншот
 ![](https://github.com/Agmongui/python/blob/main/lab01/10.png?raw=true)
 ## Используемые источники:
-```
-https://clck.ru/MfEMS
-https://skillbox.ru/media/code/mnozhestva-v-python-vvodnyy-gayd-dlya-nachinayushchikh/
-https://github.com/cyberspacedk/Git-commands
-```
+
+[Срез](https://clck.ru/MfEMS)
+
+[Множества](https://skillbox.ru/media/code/mnozhestva-v-python-vvodnyy-gayd-dlya-nachinayushchikh/)
+
+[Команды git](https://github.com/cyberspacedk/Git-commands)
+
+
 
 # Шпаргалку по работе с командами git
 
