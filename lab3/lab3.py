@@ -23,12 +23,11 @@ def to_str_rec(nested_list):
     return ' -> '.join(map(str,recursion(nested_list)))+ ' -> None'
 print(to_str_rec([1, [2, [3, [4, [5]]]]]))
 
-
-def calc_req(n):
+def calc_rec(n):
     if n == 0 or n == 1:
         return 1
-    return calc_req(n - 2) + (calc_req(n - 1) / (2 ** (n - 1)))
-print(f'a(2) == {calc_req(2)}')
+    return calc_rec(n - 2) + (calc_rec(n - 1) / (2 ** (n - 1)))
+print(f'a(2) == {calc_rec(2)}')
 
 
 def calc(n):
