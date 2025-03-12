@@ -30,7 +30,7 @@ def to_str_rec(nested_list):
 print(to_str_rec([1, [2, [3, [4, [5]]]]]))
 ```
 ## Скриншот
-![](image.png)
+![](image2.png)
 # Задание 2
 Написана функция для расчёта элемента последовательности. С рекурсией и без глобальных переменных.
 ## Решение
@@ -55,7 +55,7 @@ def calc(n):
 print(f'a(2) == {calc(2)}')
 ```
 ## Скриншот
-![](image2.png)
+![](image.png)
 ## Список используемых источников
 1.[Самоучитель по Python для начинающих. Часть 13: Рекурсивные функции](https://proglib.io/p/samouchitel-po-python-dlya-nachinayushchih-chast-13-rekursivnye-funkcii-2023-01-23)\
 2.[Как работает рекурсия – объяснение в блок-схемах и видео](https://habr.com/ru/articles/337030/)\
