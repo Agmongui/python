@@ -1,49 +1,44 @@
-def to_str_recursive(lst):
-    elements = []
-    
-    def helper(sublist):
-        for item in sublist:
-            if isinstance(item, list):
-                helper(item)
+def to_str(nested_list):
+    result = []
+    while nested_list:
+        element = nested_list.pop()
+        if isinstance(element, list):
+            nested_list.extend(element)
+        else:
+            result.append(str(element))
+    return ' -> '.join(reversed(result)) + ' -> None'
+print(to_str([1, [2, [3, [4, [5]]]]]))
+
+def to_str_rec(nested_list):
+    def recursion(nested_list):
+        if not nested_list:
+            return []
+        else:
+            first = nested_list[0]
+            rest = nested_list[1:]
+            if isinstance(first,list):
+                return recursion(first)+recursion(rest)
             else:
-                elements.append(str(item))
-    
-    helper(lst)
-    return ' -> '.join(elements) + ' -> None'
+                return [first]+ recursion(rest)
+    return ' -> '.join(map(str,recursion(nested_list)))+ ' -> None'
+print(to_str_rec([1, [2, [3, [4, [5]]]]]))
 
-print(to_str_recursive([1, [2, [3, [4, [5]]]]]))  
 
-def to_str(lst):
-    elements = []
-    stack = [lst]
-    
-    while stack:
-        current = stack.pop()
-        for item in reversed(current):
-            if isinstance(item, list):
-                stack.append(item)
-            else:
-                elements.append(str(item))
-    
-    return ' -> '.join(elements) + ' -> None'
-
-print(to_str([1, [2, [3, [4, [5]]]]])) 
-
-def req(i):
-    if i == 0 or i == 1:
+def calc_req(n):
+    if n == 0 or n == 1:
         return 1
-    return req(i - 2) + (req(i - 1) / (2 ** (i - 1)))
-print(f'a(2) == {req(2)}')
+    return calc_req(n - 2) + (calc_req(n - 1) / (2 ** (n - 1)))
+print(f'a(2) == {calc_req(2)}')
 
-def no_req(i):
-    if i == 0 or i == 1:
+
+def calc(n):
+    if n == 0 or n == 1:
         return 1
     a1=1
     a2=1
-    for n in range(2,i+1):
-        current=a1+(a2/(2**(n-1)))
+    for i in range(2,n+1):
+        current=a1+(a2/(2**(i-1)))
         a1=a2
         a2=current
     return a2
-
-print(f'a(2) == {no_req(2)}')
+print(f'a(2) == {calc(2)}')
