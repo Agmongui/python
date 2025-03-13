@@ -15,24 +15,23 @@ def to_str(nested_list):
     return ' -> '.join(reversed(result)) + ' -> None'
 print(to_str([1, [2, [3, [4, [5]]]]]))
 
+
 def to_str_rec(nested_list):
-    def recursion(nested_list):
-        if not nested_list:
+    def rec(lst):
+        if not lst: 
             return []
-        else:
-            first = nested_list[0]
-            rest = nested_list[1:]
-            if isinstance(first,list):
-                return recursion(first)+recursion(rest)
-            else:
-                return [first]+ recursion(rest)
-    return ' -> '.join(map(str,recursion(nested_list)))+ ' -> None'
+        elif isinstance(lst[0], list):  
+            return rec(lst[0]) + rec(lst[1:])
+        else:  
+            return [str(lst[0])] + rec(lst[1:])
+    return ' -> '.join(rec(nested_list)) + ' -> None'
 print(to_str_rec([1, [2, [3, [4, [5]]]]]))
+
 ```
 ## Скриншот
 ![](image2.png)
 # Задание 2
-Написана функция для расчёта элемента последовательности. С рекурсией и без глобальных переменных.
+Написана функция для расчёта элемента последовательности (рекурсией и без).
 ## Решение
 ``` python
 def calc_rec(n):
