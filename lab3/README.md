@@ -15,17 +15,16 @@ def to_str(nested_list):
     return ' -> '.join(reversed(result)) + ' -> None'
 print(to_str([1, [2, [3, [4, [5]]]]]))
 
+def rec(lst):
+    if isinstance(lst, list):
+        rest = ''
+        for n in lst:
+            if n:
+                rest += rec(n).replace("None",'')
+        return rest + 'None'
+    return  str(lst) + ' -> '
+print(rec([1, [2, [3, [4, [5]]]]]))
 
-def to_str_rec(nested_list):
-    def rec(lst):
-        if not lst: 
-            return []
-        elif isinstance(lst[0], list):  
-            return rec(lst[0]) + rec(lst[1:])
-        else:  
-            return [str(lst[0])] + rec(lst[1:])
-    return ' -> '.join(rec(nested_list)) + ' -> None'
-print(to_str_rec([1, [2, [3, [4, [5]]]]]))
 
 ```
 ## Скриншот
