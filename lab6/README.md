@@ -128,3 +128,4 @@ if __name__ == "__main__":
 ![](image.png)
 ## Список литературы
 [Руководство по Tkinter](https://metanit.com/python/tkinter/)
+[chatgpt](https://chatgpt.com/)
