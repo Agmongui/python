@@ -59,10 +59,12 @@ class Truck:
         return distance / average_speed
 
 import tkinter as tk
+from tkinter import filedialog
 from tkinter import messagebox
 from vehicles_package.car import Car
 from vehicles_package.truck import Truck
 from vehicles_package.bus import Bus
+from docx import Document
 
 class VehicleApp:
     def __init__(self, root):
@@ -70,7 +72,6 @@ class VehicleApp:
         self.root.title("Расчет поездки")
         self.root.geometry("400x350")
 
-        # Элементы интерфейса
         tk.Label(root, text="Тип транспорта:").grid(row=0, column=0, sticky="w", padx=10, pady=5)
         self.vehicle_type = tk.StringVar(value="Легковой")
         tk.OptionMenu(root, self.vehicle_type, "Легковой", "Грузовой", "Пассажирский").grid(row=0, column=1, padx=10, pady=5)
@@ -95,6 +96,7 @@ class VehicleApp:
             distance = float(self.distance_input.get())
             load = float(self.load_input.get())
 
+
             if vehicle_type == "Легковой":
                 vehicle = Car(fuel_consumption_per_100km=8, fuel_price=50)
                 fuel = vehicle.calculate_fuel_consumption(distance)
@@ -118,6 +120,29 @@ class VehicleApp:
             self.result_text.insert(tk.END, result)
         except Exception as e:
             messagebox.showerror("Ошибка", str(e))
+        self.save_report(fuel, cost, time)
+            
+
+    def save_report(self, fuel, cost, time):
+        try:
+            file_path = filedialog.asksaveasfilename(
+                defaultextension=".docx",
+                filetypes=[("Word Document", "*.docx")],
+                title="Сохранить отчет"
+            )
+            if not file_path:
+                return  
+            doc = Document()
+            doc.add_heading("Отчет по поездке", level=1)
+            doc.save("C:\domashka\op\питон\lab06\Отчёт.docx")
+            messagebox.showinfo("Готово", f"Отчет сохранен в файл: {file_path}")
+        except Exception as e:
+            messagebox.showerror("Ошибка", f"Не удалось сохранить отчет: {e}")
+
+if __name__ == "__main__":
+    root = tk.Tk()
+    app = VehicleApp(root)
+    root.mainloop()
 
 if __name__ == "__main__":
     root = tk.Tk()
