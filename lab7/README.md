@@ -259,4 +259,4 @@ class Truck(Venicle):
 ## Список литературы
 [chatgpt](https://chatgpt.com/?)
 
-[dender](https://tproger.ru/articles/dunder-metody-zachem-oni-nuzhny-i-chto-mogut)
+[dunder](https://tproger.ru/articles/dunder-metody-zachem-oni-nuzhny-i-chto-mogut)
