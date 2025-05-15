@@ -18,14 +18,7 @@ from datetime import datetime
 
 class CalendarApp(wx.Frame):
     def __init__(self, *args, **kwargs):
-        super(CalendarApp, self).__init__(*args, **kwargs)
-
-        # Настройка окна
-        self.SetTitle("Календарь с событиями")
-        self.SetSize(800, 600)
-        self.Centre()
-
-        # Инициализация переменных
+        super(CalendarApp, self).__init__(*args, **kwargs) # приватные атрибуты  ( не должны использоваться напрямую)
         self.now = datetime.now()
         self.year = self.now.year
         self.month = self.now.month
@@ -36,7 +29,8 @@ class CalendarApp(wx.Frame):
         self.create_widgets()
 
     def create_widgets(self):
-        # Выбор года
+        """Создание общих виджетов."""
+    # Выбор года
         year_label = wx.StaticText(self.panel, label="Год:", pos=(20, 20))
         self.year_input = wx.TextCtrl(self.panel, value=str(self.year), pos=(70, 20), size=(80, -1))
 
@@ -46,22 +40,17 @@ class CalendarApp(wx.Frame):
 
         # Кнопка для обновления календаря
         update_button = wx.Button(self.panel, label="Показать календарь", pos=(340, 20))
-        update_button.Bind(wx.EVT_BUTTON, self.show_calendar)  # Привязываем обработчик
+        update_button.Bind(wx.EVT_BUTTON, self.show_calendar) # обновляет календарь для выбранного года и месяца
 
         # Сетка для отображения календаря
-        self.calendar_grid = wx.grid.Grid(self.panel, pos=(20, 60), size=(740, 300))  # Создаем сетку
-        self.calendar_grid.CreateGrid(6, 7)  # 6 строк (недель), 7 столбцов (дней недели)
-        self.calendar_grid.SetRowLabelSize(0)  # Убираем метки строк
-        self.calendar_grid.SetColLabelValue(0, "Пн")
-        self.calendar_grid.SetColLabelValue(1, "Вт")
-        self.calendar_grid.SetColLabelValue(2, "Ср")
-        self.calendar_grid.SetColLabelValue(3, "Чт")
-        self.calendar_grid.SetColLabelValue(4, "Пт")
-        self.calendar_grid.SetColLabelValue(5, "Сб")
-        self.calendar_grid.SetColLabelValue(6, "Вс")
+        self.calendar_grid = wx.grid.Grid(self.panel, pos=(20, 60), size=(740, 300))
+        self.calendar_grid.CreateGrid(6, 7)
+        self.calendar_grid.SetRowLabelSize(0)
+        for col, day in enumerate(["Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс"]):
+            self.calendar_grid.SetColLabelValue(col, day)
 
         # Привязываем обработчик клика по ячейке
-        self.calendar_grid.Bind(wx.grid.EVT_GRID_CELL_LEFT_CLICK, self.on_cell_click)
+        self.calendar_grid.Bind(wx.grid.EVT_GRID_CELL_LEFT_CLICK, self.on_cell_click)  # нажимаю на день и высвечивает событие 
 
         # Поле для ввода даты события
         date_label = wx.StaticText(self.panel, label="Дата (YYYY-MM-DD):", pos=(20, 400))
@@ -73,7 +62,7 @@ class CalendarApp(wx.Frame):
 
         # Кнопка для добавления события
         add_event_button = wx.Button(self.panel, label="Добавить событие", pos=(570, 400))
-        add_event_button.Bind(wx.EVT_BUTTON, self.add_event)
+        add_event_button.Bind(wx.EVT_BUTTON, self.add_event) # Чтобы создать новое событие для введенной даты и обновить старый список событий
 
         # Текстовое поле для отображения событий
         self.events_text = wx.TextCtrl(
@@ -83,8 +72,90 @@ class CalendarApp(wx.Frame):
             size=(740, 120)
         )
 
+    def on_cell_click(self, event): 
+        """Обработчик клика по ячейке сетки."""
+        try:
+            row = event.GetRow()  # Получаем строку
+            col = event.GetCol()  # Получаем столбец
+
+            # Получаем значение ячейки (день месяца)
+            day = self.calendar_grid.GetCellValue(row, col).strip()
+
+            if not day.isdigit():  # Проверяем, что в ячейке есть число
+                wx.MessageBox("Выбранная ячейка не содержит дату.", "Ошибка", wx.OK | wx.ICON_ERROR)
+                event.Skip()
+                return
+
+            day = int(day)
+            year = int(self.year_input.GetValue())
+            month = int(self.month_input.GetValue())
+
+            # Формируем ключ даты в формате YYYY-MM-DD
+            date_key = f"{year}-{month:02d}-{day:02d}"
+
+            # Проверяем, есть ли события для этой даты
+            if date_key in self.events:
+                events_list = self.events[date_key]
+                events_message = "\n".join([f"{idx}. {event}" for idx, event in enumerate(events_list, start=1)])
+                wx.MessageBox(f"События на {date_key}:\n{events_message}", "События", wx.OK | wx.ICON_INFORMATION)
+            else:
+                wx.MessageBox(f"На {date_key} нет событий.", "События", wx.OK | wx.ICON_INFORMATION)
+
+        except Exception as e:
+            wx.MessageBox(f"Произошла ошибка: {e}", "Ошибка", wx.OK | wx.ICON_ERROR)
+
+        finally:
+            event.Skip()  # Пропускаем дальнейшую обработку события
+
     def show_calendar(self, event):
         """Обновление календаря."""
+        raise NotImplementedError("Метод должен быть переопределен в подклассе.")
+
+    def add_event(self, event): # хранилище событий
+        """Добавление события."""
+        try:
+            # Получение даты и события
+            date = self.date_input.GetValue()
+            event_description = self.event_input.GetValue()
+
+            # Проверка корректности даты
+            datetime.strptime(date, "%Y-%m-%d")
+
+            if not event_description.strip():
+                raise ValueError("Описание события не может быть пустым.")
+
+            # Добавление события в хранилище
+            if date not in self.events:
+                self.events[date] = []  # Создаем пустой список, если дата еще не существует
+            self.events[date].append(event_description)  # Добавляем событие в список
+
+            # Обновление текстового поля с событиями
+            self.update_events_display()
+
+            # Очистка полей ввода
+            self.date_input.Clear()
+            self.event_input.Clear()
+        except ValueError as e:
+            wx.MessageBox(f"Ошибка: {e}", "Ошибка", wx.OK | wx.ICON_ERROR)
+
+    def update_events_display(self): # обновляет текстовое поле
+        """Обновление текстового поля с событиями."""
+        events_output = "События:\n"
+        for date, events_list in self.events.items():
+            events_output += f"{date}:\n"
+            for idx, event in enumerate(events_list, start=1):
+                events_output += f"  {idx}. {event}\n"
+        # Отображение событий в текстовом поле
+        self.events_text.SetValue(events_output)
+
+
+class AdvancedCalendarApp(CalendarApp):
+    def __init__(self, *args, **kwargs):
+        super(AdvancedCalendarApp, self).__init__(*args, **kwargs)
+        self.SetTitle("Улучшенный календарь")
+
+    def show_calendar(self, event):
+        """Переопределенный метод для отображения календаря."""
         try:
             # Получение выбранных года и месяца
             year = int(self.year_input.GetValue())
@@ -115,81 +186,17 @@ class CalendarApp(wx.Frame):
 
                         # Отображение событий, если они есть
                         if date_key in self.events:
-                            events_list = self.events[date_key]
-                            events_summary = "\n".join(events_list[:2])  # Показываем максимум 2 события
+                            events_summary = "\n".join(self.events[date_key][:2])  # Показываем максимум 2 события
                             self.calendar_grid.SetCellValue(row, col, f"{day}\n{events_summary}")
 
         except ValueError as e:
             wx.MessageBox(f"Ошибка: {e}", "Ошибка", wx.OK | wx.ICON_ERROR)
 
-    def on_cell_click(self, event):
-        """Обработчик клика по ячейке сетки."""
-        row = event.GetRow()  # Получаем строку
-        col = event.GetCol()  # Получаем столбец
-
-        # Получаем значение ячейки (день месяца)
-        day = self.calendar_grid.GetCellValue(row, col).strip()
-
-        if day.isdigit():  # Проверяем, что в ячейке есть число
-            day = int(day)
-            year = int(self.year_input.GetValue())
-            month = int(self.month_input.GetValue())
-
-            # Формируем ключ даты в формате YYYY-MM-DD
-            date_key = f"{year}-{month:02d}-{day:02d}"
-
-            # Проверяем, есть ли события для этой даты
-            if date_key in self.events:
-                events_list = self.events[date_key]
-                events_message = "\n".join([f"{idx}. {event}" for idx, event in enumerate(events_list, start=1)])
-                wx.MessageBox(f"События на {date_key}:\n{events_message}", "События", wx.OK | wx.ICON_INFORMATION)
-            else:
-                wx.MessageBox(f"На {date_key} нет событий.", "События", wx.OK | wx.ICON_INFORMATION)
-
-        event.Skip()  # Пропускаем дальнейшую обработку события
-
-    def add_event(self, event):
-        """Добавление события."""
-        try:
-            # Получение даты и события
-            date = self.date_input.GetValue()
-            event_description = self.event_input.GetValue()
-
-            # Проверка корректности даты
-            datetime.strptime(date, "%Y-%m-%d")
-
-            if not event_description.strip():
-                raise ValueError("Описание события не может быть пустым.")
-
-            # Добавление события в хранилище
-            if date not in self.events:
-                self.events[date] = []  # Создаем пустой список, если дата еще не существует
-            self.events[date].append(event_description)  # Добавляем событие в список
-
-            # Обновление текстового поля с событиями
-            self.update_events_display()
-
-            # Очистка полей ввода
-            self.date_input.Clear()
-            self.event_input.Clear()
-        except ValueError as e:
-            wx.MessageBox(f"Ошибка: {e}", "Ошибка", wx.OK | wx.ICON_ERROR)
-
-    def update_events_display(self):
-        """Обновление текстового поля с событиями."""
-        events_output = "События:\n"
-        for date, events_list in self.events.items():
-            events_output += f"{date}:\n"
-            for idx, event in enumerate(events_list, start=1):
-                events_output += f"  {idx}. {event}\n"
-        # Отображение событий в текстовом поле
-        self.events_text.SetValue(events_output)
-
 
 # Запуск приложения
 if __name__ == "__main__":
     app = wx.App(False)
-    frame = CalendarApp(None)
+    frame = AdvancedCalendarApp(None)  # Используем подкласс
     frame.Show()
     app.MainLoop()
 ```
